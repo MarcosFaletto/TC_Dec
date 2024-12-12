@@ -4,31 +4,27 @@ import tc.dec.compiladorParser.*;
 import java.util.*;
 
 public class Caminante extends compiladorBaseVisitor<Void> {
-    private final TablaSimbolos tablaSimbolos = TablaSimbolos.obtenerInstancia();
+    private TablaSimbolos tablaSimbolos = new TablaSimbolos();
     private List<String> codigoTresDirecciones = new ArrayList<>();
     private int tempCount = 0;
-    private Contexto contextoActual; // Definir contextoActual
 
     @Override
     public Void visitPrograma(ProgramaContext ctx) {
-        contextoActual = new Contexto(null); // Contexto global
-        tablaSimbolos.entrarNuevoContexto(); // Asegurarse de que el contexto esté en la pila
+        tablaSimbolos.addContexto(); // Asegurarse de que el contexto esté en la pila
         visitChildren(ctx); // Visitar todos los nodos hijos
-        tablaSimbolos.salirDeContexto(); // Salir del contexto después de procesar el programa
+        tablaSimbolos.delContexto(); // Salir del contexto después de procesar el programa
         return null;
     }
-
+    /* */
     @Override
     public Void visitDeclaracion(DeclaracionContext ctx) {
-        String nombre = ctx.ID().getText();
-        String tipo = ctx.tipo() != null ? ctx.tipo().getText() : null;
+        String nombre = ctx.param().ID().toString();            
+        TipoDato tipo = tablaSimbolos.buscarTipoIdentificador(nombre);
 
         if (tipo != null) {
-            if (!tablaSimbolos.existeSimboloEnContextoActual(nombre)) {
-                TipoDato tipoDato = TipoDato.valueOf(tipo.toUpperCase());
-                Variable nuevaVariable = new Variable(nombre, tipoDato);
-                tablaSimbolos.agregarVariable(nuevaVariable, contextoActual);
-
+            Id id = new Id(nombre, tipo);
+            if (tablaSimbolos.buscarIdentificadorLocal(id)!=null) {
+                tablaSimbolos.addIdentificador(id);
                 if (ctx.expresion() != null) {
                     String valor = ctx.expresion().getText();
                     codigoTresDirecciones.add(nombre + " = " + valor);
@@ -64,9 +60,9 @@ public class Caminante extends compiladorBaseVisitor<Void> {
 
     @Override
     public Void visitBloque(BloqueContext ctx) {
-        tablaSimbolos.entrarNuevoContexto();
+        tablaSimbolos.addContexto();
         visitChildren(ctx); // Visitar todos los nodos hijos del bloque
-        tablaSimbolos.salirDeContexto();
+        tablaSimbolos.delContexto();
         return null;
     }
 

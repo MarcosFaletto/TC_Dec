@@ -38,9 +38,23 @@ DECREMENTO
 
 COMENTARIO : '//' ~[\r\n]* -> skip ;
 
-programa
-    : (incluir_libreria | definicion_funcion | bloque)+ EOF
-    ;
+programa: instrucciones EOF;
+
+instrucciones : instruccion instrucciones
+              |
+              ;
+
+instruccion : incluir_libreria
+            | definicion_funcion
+            | bloque 
+            | declaracion
+            | asignacion
+            | estructura_control
+            | llamada_funcion
+            | expresion
+            | retorno
+            | printf
+            ;
 
 incluir_libreria
     : '#' 'include' '<' ID PUNTO ID '>'
@@ -51,7 +65,7 @@ definicion_funcion
     ;
 
 bloque
-    : LLAVE_IZQ sentencia* LLAVE_DER
+    : LLAVE_IZQ instruccion* LLAVE_DER
     ;
 
 parametros
@@ -62,22 +76,14 @@ parametro
     : tipo ID
     ;
 
+param : tipo ID ;
+
 tipo
     : 'int' | 'float' | 'char' | 'void' | 'string' | 'double'
     ;
 
-sentencia
-    : declaracion
-    | asignacion
-    | estructura_control
-    | llamada_funcion
-    | expresion
-    | retorno
-    | printf
-    ;
-
 declaracion
-    : tipo ID (('=' expresion) | ('=' llamada_funcion))? PUNTO_Y_COMA
+    : param (('=' expresion) | ('=' llamada_funcion))? PUNTO_Y_COMA
     ;
 
 asignacion

@@ -39,14 +39,19 @@ public class App
         parser.addErrorListener(new CustomErrorListener());
 
         // Iniciar el parsing desde la regla 'programa'
-        ParseTree tree = parser.programa();
+        //ParseTree tree = parser.programa();
 
-        //parser.programa();
+        //TablaSimbolos tabla = TablaSimbolos.obtenerInstancia();
+
+        // Imprimir toda la tabla de símbolos
+        //tabla.imprimirTablaSimbolos();
+
+        parser.programa();
 
         // Mostrar el árbol sintáctico
         //System.out.println("Árbol sintáctico:");
         //System.out.println(tree.toStringTree(parser));
-
+        /* 
         Caminante caminante = new Caminante();
         caminante.visit(tree);
 
@@ -65,6 +70,6 @@ public class App
         System.out.println("Código optimizado:");
         for (String linea : codigoOptimizado) {
             System.out.println(linea);
-        }
+        }*/
     }
 }

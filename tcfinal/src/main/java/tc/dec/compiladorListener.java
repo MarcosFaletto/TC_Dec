@@ -30,6 +30,26 @@ public interface compiladorListener extends ParseTreeListener {
 	 */
 	void exitPrograma(compiladorParser.ProgramaContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link compiladorParser#instrucciones}.
+	 * @param ctx the parse tree
+	 */
+	void enterInstrucciones(compiladorParser.InstruccionesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link compiladorParser#instrucciones}.
+	 * @param ctx the parse tree
+	 */
+	void exitInstrucciones(compiladorParser.InstruccionesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link compiladorParser#instruccion}.
+	 * @param ctx the parse tree
+	 */
+	void enterInstruccion(compiladorParser.InstruccionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link compiladorParser#instruccion}.
+	 * @param ctx the parse tree
+	 */
+	void exitInstruccion(compiladorParser.InstruccionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link compiladorParser#incluir_libreria}.
 	 * @param ctx the parse tree
 	 */
@@ -80,6 +100,16 @@ public interface compiladorListener extends ParseTreeListener {
 	 */
 	void exitParametro(compiladorParser.ParametroContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link compiladorParser#param}.
+	 * @param ctx the parse tree
+	 */
+	void enterParam(compiladorParser.ParamContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link compiladorParser#param}.
+	 * @param ctx the parse tree
+	 */
+	void exitParam(compiladorParser.ParamContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link compiladorParser#tipo}.
 	 * @param ctx the parse tree
 	 */
@@ -89,16 +119,6 @@ public interface compiladorListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTipo(compiladorParser.TipoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link compiladorParser#sentencia}.
-	 * @param ctx the parse tree
-	 */
-	void enterSentencia(compiladorParser.SentenciaContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link compiladorParser#sentencia}.
-	 * @param ctx the parse tree
-	 */
-	void exitSentencia(compiladorParser.SentenciaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link compiladorParser#declaracion}.
 	 * @param ctx the parse tree

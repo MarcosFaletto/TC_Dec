@@ -4,105 +4,79 @@ import java.util.*;
 
 public class TablaSimbolos {
 
-    private static TablaSimbolos instancia;
-    private final Deque<Contexto> pilaContextos;
+    private List<Contexto> contextos;
 
-    private TablaSimbolos() {
-        pilaContextos = new ArrayDeque<>();
-        pilaContextos.push(new Contexto(null)); // Contexto global inicial
+    TablaSimbolos() {
+        this.contextos = new ArrayList<>();
+        this.contextos.add(new Contexto());
     }
 
-    public static TablaSimbolos obtenerInstancia() {
-        if (instancia == null) {
-            instancia = new TablaSimbolos();
+    public void addContexto() {
+        contextos.add(new Contexto());
+    }
+
+    public void delContexto() {
+        if (contextos.size() > 1) {
+            contextos.remove(contextos.size() - 1);
         }
-        return instancia;
     }
 
-    public void agregarSimbolo(Id simbolo, Contexto contexto) {
-        contexto.agregarSimbolo(simbolo);
-    }
-
-    public boolean existeSimboloEnContextoActual(String nombre) {
-        Contexto contextoActual = pilaContextos.peek();
-        return contextoActual != null && contextoActual.existeSimbolo(nombre);
-    }
-
-    public boolean existeSimbolo(String nombre) {
-        for (Contexto contexto : pilaContextos) {
-            if (contexto.existeSimbolo(nombre)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Variable buscarVariable(String nombre, Contexto contexto) {
-        Id simbolo = contexto.buscarSimbolo(nombre);
-        if (simbolo instanceof Variable) {
-            return (Variable) simbolo;
-        }
-        return null;
-    }
-
-    public Funcion buscarFuncion(String nombre) {
-        for (Contexto contexto : pilaContextos) {
-            Id simbolo = contexto.buscarSimbolo(nombre);
-            if (simbolo instanceof Funcion) {
-                return (Funcion) simbolo;
+    public Id buscarIdentificador(Id id) {
+        for (int i = contextos.size() - 1; i >= 0; i--) {
+            Id identificador = contextos.get(i).buscarIdentificador(id);
+            if (identificador != null) { 
+                return identificador;
             }
         }
         return null;
     }
 
-
-
-    public void agregarFuncion(Funcion funcion) {
-        agregarSimbolo(funcion, pilaContextos.peek());
+    public TipoDato buscarTipoIdentificador(String nombre) {
+        Id id = new Id(nombre, null);
+        
+        for (int i = contextos.size() - 1; i >= 0; i--) {
+            Id encontrado = contextos.get(i).buscarIdentificador(id);
+            if (encontrado != null) {
+                return encontrado.getTipo();
+            }
+        }
+        
+        return null;
     }
 
-    public void agregarVariable(Variable variable, Contexto contexto) {
-        contexto.agregarSimbolo(variable);
-    }
     
-    public void marcarComoUsado(String nombre, Contexto contexto) {
-        Variable variable = buscarVariable(nombre, contexto);
-        if (variable != null) {
-            variable.marcarComoUsado();
+    public void identificadorInicializado(Id id) {
+        for (int i = contextos.size() - 1; i >= 0; i--) {
+            Id identificador = contextos.get(i).buscarIdentificador(id);
+            if (identificador != null) {
+                identificador.marcarComoInicializado();
+                return;
+            }
         }
     }
-    
-    public void marcarComoInicializado(String nombre, Contexto contexto) {
-        Variable variable = buscarVariable(nombre, contexto);
-        if (variable != null) {
-            variable.marcarComoInicializado();
-        }
+
+    public List<Contexto> getContextos() {
+        return contextos;
     }
     
 
-    public void entrarNuevoContexto() {
-        pilaContextos.push(new Contexto(pilaContextos.peek()));
-    }
-
-    public void salirDeContexto() {
-        pilaContextos.pop();}
-        /*Contexto contextoActual = pilaContextos.pop();
-        contextoActual.imprimirSimbolos(); // Llamar al método de impresión aquí
-        List<Id> variablesDeclaradas = contextoActual.obtenerVariablesDeclaradas();
-        for (Id variable : variablesDeclaradas) {
-            System.out.println("Variable declarada: " + variable.getNombre());
+    public void identificadorUtilizado(Id id) {
+        for (int i = contextos.size() - 1; i >= 0; i--) {
+            Id identificador = contextos.get(i).buscarIdentificador(id);
+            if (identificador != null) {
+                identificador.marcarComoUsado();
+                return;
+            }
         }
     }
-    
-    
-    
 
-    public List<Variable> obtenerVariablesNoUsadas() {
-        List<Variable> noUsadas = new ArrayList<>();
-        for (Contexto contexto : pilaContextos) {
-            noUsadas.addAll(contexto.obtenerVariablesNoUsadas());
-        }
-        return noUsadas;
-    }*/
+
+    public Id buscarIdentificadorLocal(Id id) {
+        return contextos.get(contextos.size() - 1).buscarIdentificador(id);
+    }
+
+    public void addIdentificador(Id identificador) {
+        contextos.get(contextos.size() - 1).agregarIdentificador(identificador);
+    }
     
 }

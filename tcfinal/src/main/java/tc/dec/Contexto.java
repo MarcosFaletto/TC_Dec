@@ -5,69 +5,31 @@ import java.util.*;
 
 
 class Contexto {
-    private final Contexto padre;
-    private final Map<String, Id> simbolos;
+    private Map<String, Id> identificadores;
 
-    public Contexto(Contexto padre) {
-        this.padre = padre;
-        this.simbolos = new HashMap<>();
+    public Contexto() {
+        this.identificadores = new HashMap<>();
     }
 
-    public void agregarSimbolo(Id simbolo) {
-        simbolos.put(simbolo.getNombre(), simbolo);
+    public void agregarIdentificador(Id simbolo) {
+        identificadores.put(simbolo.getNombre(), simbolo);
+        System.out.println("AGREGUE: " + simbolo.getNombre());
     }
 
-    public boolean existeSimbolo(String nombre) {
-        return simbolos.containsKey(nombre);
-    }
-
-    public Id buscarSimbolo(String nombre) {
-        if (simbolos.containsKey(nombre)) {
-            return simbolos.get(nombre);
-        } else if (padre != null) {
-            return padre.buscarSimbolo(nombre);
+    public Id buscarIdentificador(Id id) {
+        for (Id identificador : identificadores.values()) {
+            if (identificador.getNombre().equals(id.getNombre())) {
+                // Si el tipo es null, lo comparamos con el tipo del identificador, ya que es un tipo opcional
+                if (id.getTipo() == null || identificador.getTipo().equals(id.getTipo())) {
+                    return identificador;
+                }
+            }
         }
         return null;
     }
 
-    /*public List<Id> obtenerVariablesDeclaradas() {
-        List<Id> variablesDeclaradas = new ArrayList<>();
-        System.out.println("ESTOY");
-        for (Map.Entry<String, Id> entry : simbolos.entrySet()) {
-            Id simbolo = entry.getValue();
-            if (simbolo instanceof Id variable) {
-                variablesDeclaradas.add(variable);
-            }
-        }
-        return variablesDeclaradas;
+    public Map<String, Id> getIdentificadores() {
+        return identificadores;
     }
-    
-    public void imprimirSimbolos() {
-        System.out.println("Símbolos en el contexto:");
-        for (Map.Entry<String, Id> entry : simbolos.entrySet()) {
-            Id simbolo = entry.getValue();
-            if (simbolo instanceof Variable variable) {
-                System.out.println("Variable: " + variable.getNombre() + ", Tipo: " + variable.getTipo() + ", Usado: " + variable.isUsado());
-            } else {
-                System.out.println("Símbolo: " + simbolo.getNombre() + ", Tipo: " + simbolo.getClass().getSimpleName());
-            }
-        }
-    }
-    
-    
-    public List<Variable> obtenerVariablesNoUsadas() {
-        List<Variable> noUsadas = new ArrayList<>();
-        for (Id simbolo : simbolos.values()) {
-            if (simbolo instanceof Variable variable) {
-                if (!variable.isUsado()) {
-                    noUsadas.add(variable);
-                }
-            }
-        }
-        return noUsadas;
-    }*/
 
-    public Contexto getPadre() {
-        return padre;
-    }
 }

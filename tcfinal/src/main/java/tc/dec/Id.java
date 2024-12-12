@@ -1,10 +1,10 @@
 package tc.dec;
 
-public abstract class Id {
-    private String nombre;
-    private TipoDato tipo;
-    private boolean inicializado;
-    private boolean usado;
+public class Id {
+    protected String nombre;
+    protected TipoDato tipo;
+    protected boolean inicializado;
+    protected boolean usado;
 
     public Id(String nombre, TipoDato tipo) {
         this.nombre = nombre;

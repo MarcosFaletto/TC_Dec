@@ -25,6 +25,18 @@ public interface compiladorVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrograma(compiladorParser.ProgramaContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link compiladorParser#instrucciones}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInstrucciones(compiladorParser.InstruccionesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link compiladorParser#instruccion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInstruccion(compiladorParser.InstruccionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link compiladorParser#incluir_libreria}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -55,17 +67,17 @@ public interface compiladorVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParametro(compiladorParser.ParametroContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link compiladorParser#param}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParam(compiladorParser.ParamContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link compiladorParser#tipo}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTipo(compiladorParser.TipoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link compiladorParser#sentencia}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSentencia(compiladorParser.SentenciaContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link compiladorParser#declaracion}.
 	 * @param ctx the parse tree
